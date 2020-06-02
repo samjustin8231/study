@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Controller
-public class UserController {
+public class UserController1 {
     private Metrics metrics = new Metrics();
 
-    public UserController() {
+    public UserController1() {
         metrics.startRepeatedReport(60, TimeUnit.SECONDS);
     }
 
