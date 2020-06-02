@@ -29,8 +29,8 @@ public abstract class ScheduledReporter {
                 metricsStorage.getRequestInfos(startTimeInMillis, endTimeInMillis);
         Iterator<Map.Entry<String, List<RequestInfo>>> iterator = requestInfos.entrySet().iterator();
         while ((iterator.hasNext())) {
-            Map<String, RequestStat> requestStats = aggregator.aggregate(iterator.next().getValue(), durationInMillis);
-            viewer.output(requestStats, startTimeInMillis, endTimeInMillis);
+//            Map<String, RequestStat> requestStats = aggregator.aggregate(iterator.next().getValue(), durationInMillis);
+//            viewer.output(requestStats, startTimeInMillis, endTimeInMillis);
         }
 
     }
