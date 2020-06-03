@@ -1,0 +1,42 @@
+@startuml context
+!includeurl https://raw.githubusercontent.com/xuanye/plantuml-style-c4/master/c4_context.puml
+' uncomment the following line and comment the first to use locally
+'!include c4_context.puml
+
+LAYOUT_WITH_LEGEND
+
+title System Context diagram for 客户满意度服务中心
+
+Actor(user, '用户', "坐席/团队长/培训员/管理员")
+System_Boundary(c1, "context") {
+    System(telesphorus, "客户满意度服务中心")
+    System_Ext(audit, "众安运营审计")
+    System_Ext(blacklist, "健康险黑名单")
+    System_Ext(open, "众安开放平台")
+    System_Ext(promtion, "众推广","流失订单推送")
+    System_Ext(unpaid, "直营未支付","未支付订单推送")
+    System_Ext(msj, "直营马上金", "借款申请推送")
+    System_Ext(life, "众安生命", "客户信息查询")
+    System_Ext(renewal, "健康险续保系统","待续保清单推送，续保业务")
+    System_Ext(tel, "电话平台")
+}
+Actor(person, "客户")
+
+Rel(user, telesphorus, "Uses", "HTTPS")
+Rel(telesphorus, audit, "send msaage", "ONS")
+Rel(telesphorus, blacklist, "check blacklist", "JSON/HTTP")
+Rel(telesphorus, open, "commit order/send sms", "JSON/HTTP")
+Rel(promtion, telesphorus, "push loss order", "JSON/HTTP")
+Rel(unpaid, telesphorus, "push unpaid/paid order", "JSON/HTTP")
+Rel(msj, telesphorus, "push credit", "JSON/HTTP")
+Rel(renewal, telesphorus, "push policy/order", "JSON/HTTP")
+Rel(telesphorus, life, "query", "JSON/HTTP")
+Rel(telesphorus, tel, "call in/out")
+Rel(open, renewal, "commit order/send sms", "JSON/HTTP")
+Rel(telesphorus, tel, "sync", "JSON/HTTP")
+Rel_Neighbor(person, tel, "call in/out")
+Rel(person, renewal, "renew/new")
+Rel(renewal, person, "send sms/message")
+Rel(person, unpaid, "new")
+Rel(person, msj, "credit")
+@enduml
