@@ -5,6 +5,9 @@ import java.net.Socket;
 import java.util.Date;
 
 /**
+ * BIO client </br>
+ * 启动一个线程，一直发送数据，每隔2s发送一次
+ *
  * @author sunyajun
  * @date 2020/4/20 1:49 PM
  */

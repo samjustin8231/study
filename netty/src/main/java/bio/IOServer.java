@@ -9,6 +9,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * Server启动一个线程，一直跑</br>
+ * server监听socket，每监听到一个新的client的连接，启动一个新的线程从该socket中读取数据
+ *
  * @author sunyajun
  * @date 2020/4/20 1:46 PM
  */
