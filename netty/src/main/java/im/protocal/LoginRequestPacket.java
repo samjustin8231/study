@@ -11,7 +11,7 @@ import static im.protocal.Command.LOGIN_REQUEST;
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private String userId;
+    private Integer userId;
 
     private String username;
 

@@ -13,7 +13,7 @@
         <module name="spring-study" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8">
       <module name="backend" target="1.8" />
       <module name="designpattern" target="1.8" />
       <module name="netty" target="8" />

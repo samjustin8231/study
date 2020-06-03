@@ -14,29 +14,26 @@ import static im.protocal.Command.LOGIN_RESPONSE;
 /**
  * @author sunyajun
  * @date 2020/4/20 2:42 PM
- */public class PacketCodeC {
+ */
+public class PacketCodeC {
 
-    private static final int MAGIC_NUMBER = 0x12345678;
     public static final PacketCodeC INSTANCE = new PacketCodeC();
 
-    private final Map<Byte, Class<? extends Packet>> packetTypeMap;
-    private final Map<Byte, Serializer> serializerMap;
+    private static final int MAGIC_NUMBER = 0x12345678;
+    private static final Map<Byte, Class<? extends Packet>> packetTypeMap;
+    private static final Map<Byte, Serializer> serializerMap;
 
-
-    private PacketCodeC() {
+    static {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
-        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
         serializerMap.put(serializer.getSerializerAlogrithm(), serializer);
     }
 
-
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
-        // 1. 创建 ByteBuf 对象
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {        // 1. 创建 ByteBuf 对象
+        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
         // 2. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
@@ -51,8 +48,25 @@ import static im.protocal.Command.LOGIN_RESPONSE;
         return byteBuf;
     }
 
+    public ByteBuf encode(Packet packet) {
+        // 1. 创建 ByteBuf 对象
+        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer();
+        // 2. 序列化 java 对象
+        byte[] bytes = Serializer.DEFAULT.serialize(packet);
+
+        // 3. 实际编码过程
+        byteBuf.writeInt(MAGIC_NUMBER);
+        byteBuf.writeByte(packet.getVersion());
+        byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlogrithm());
+        byteBuf.writeByte(packet.getCommand());
+        byteBuf.writeInt(bytes.length);
+        byteBuf.writeBytes(bytes);
+
+        return byteBuf;
+    }
 
     public Packet decode(ByteBuf byteBuf) {
+        // 协议: magic number(4), version(1), serializeAlgorithm(1), command(1), length(4), data
         // 跳过 magic number
         byteBuf.skipBytes(4);
 
