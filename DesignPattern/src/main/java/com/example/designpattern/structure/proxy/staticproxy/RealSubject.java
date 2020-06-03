@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RealSubject implements Subject {
 
-	private String name = "sam";
+	private String name = "小明";
 
 	@Override
 	public void visit() {
-		log.info("{}", name);
+		log.info("=====> visit[访问目标对象的方法], name:{}", name);
 	}
 }
