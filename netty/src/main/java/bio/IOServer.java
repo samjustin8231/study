@@ -10,7 +10,9 @@ import java.net.Socket;
 
 /**
  * Server启动一个线程，一直跑</br>
- * server监听socket，每监听到一个新的client的连接，启动一个新的线程从该socket中读取数据
+ * server监听socket，每监听到一个新的client的连接，启动一个新的线程从该socket中读取数据</br>
+ * IO 编程模型在客户端较少的情况下运行良好，但是对于客户端比较多的业务来说，单机服务端可能需要支撑成千上万的连接;
+ * 传统的 IO 模型中，每个连接创建成功之后都需要一个线程来维护，每个线程包含一个 while 死循环，那么 1w 个连接对应 1w 个线程，继而 1w 个 while 死循环
  *
  * @author sunyajun
  * @date 2020/4/20 1:46 PM
