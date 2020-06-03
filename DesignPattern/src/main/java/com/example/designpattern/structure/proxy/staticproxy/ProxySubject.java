@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 类的实现描述：TODO 类实现描述
+ * 代理对象
  *
  * @author sunyajun 2019/2/28 10:55 AM
  */
