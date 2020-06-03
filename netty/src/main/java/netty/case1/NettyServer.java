@@ -1,13 +1,10 @@
-package netty;
+package netty.case1;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.Future;
@@ -51,10 +48,13 @@ public class NettyServer {
                 // childHandler()用于指定处理新连接数据的读写处理逻辑
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
-                        System.out.println("=====> initChannel...");
+                        System.out.println("=====> init client Channel...");
 
                         Attribute<String> clientKey = ch.attr(AttributeKey.valueOf("clientKey"));
                         System.out.println("=====> get client attr, clientKey:" + clientKey);
+
+                        // ch.pipeline() 返回的是和这条连接相关的逻辑处理链，采用了责任链模式
+                        // addLast() 方法 添加一个逻辑处理器
                         ch.pipeline().addLast(new FirstServerHandler());
                     }
                 });

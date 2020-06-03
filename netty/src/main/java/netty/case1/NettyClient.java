@@ -1,4 +1,4 @@
-package netty;
+package netty.case1;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -38,6 +38,8 @@ public class NettyClient {
 
                         Attribute<String> clientKey = ch.attr(AttributeKey.valueOf("clientKey"));
                         System.out.println("=====> get client attr, clientKey:" + clientKey);
+                        // ch.pipeline() 返回的是和这条连接相关的逻辑处理链，采用了责任链模式
+                        // addLast() 方法 添加一个逻辑处理器
                         ch.pipeline().addLast(new FirstClientHandler());
                     }
                 });

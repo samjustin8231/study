@@ -1,4 +1,4 @@
-package netty;
+package netty.case1;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -12,9 +12,15 @@ import java.util.Date;
  * @date 2020/4/20 2:29 PM
  */
 public class FirstClientHandler extends ChannelInboundHandlerAdapter {
+
+    /**
+     * 在客户端连接建立成功之后被调用
+     *
+     * @param ctx
+     */
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println(new Date() + ": 客户端写出数据");
+        System.out.println("=====> " + new Date() + ": 客户端写出数据");
 
         // 1. 获取数据
         ByteBuf buffer = getByteBuf(ctx);
@@ -40,6 +46,6 @@ public class FirstClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        System.out.println(new Date() + ": 客户端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
+        System.out.println("======> " + new Date() + ": 客户端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
     }
 }
