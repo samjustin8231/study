@@ -20,6 +20,7 @@ import java.util.Set;
 public class NIOServer {
 
     public static void main(String[] args) throws IOException {
+        // serverSelector负责轮询是否有新的连接，clientSelector负责轮询连接是否有数据可读
         Selector serverSelector = Selector.open();
         Selector clientSelector = Selector.open();
 
