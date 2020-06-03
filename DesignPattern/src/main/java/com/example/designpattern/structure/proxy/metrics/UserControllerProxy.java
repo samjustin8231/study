@@ -3,6 +3,8 @@ package com.example.designpattern.structure.proxy.metrics;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 对普通接口利用静态代理的方式记录接口的执行耗时，用来代理目标类
+ *
  * @author sunyajun
  * @date 2020/4/15 10:52 AM
  */

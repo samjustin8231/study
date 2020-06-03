@@ -3,6 +3,7 @@ package com.example.designpattern.structure.proxy.metrics;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 实际的接口，目标类
  * @author sunyajun
  * @date 2020/4/15 10:52 AM
  */

@@ -3,10 +3,11 @@ package com.example.designpattern.behavior.iterator;
 import java.util.ArrayList;
 
 /**
+ * 具体迭代器：婺源景点迭代器
+ *
  * @author sunyajun
  * @date 2020/4/15 1:01 PM
  */
-//具体迭代器：婺源景点迭代器
 class WyViewSpotIterator implements ViewSpotIterator {
     private ArrayList<WyViewSpot> list = null;
     private int index = -1;

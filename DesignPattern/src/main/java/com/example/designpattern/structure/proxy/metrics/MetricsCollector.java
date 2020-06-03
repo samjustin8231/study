@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 记录接口耗时类
+ *
  * @author sunyajun
  * @date 2020/4/15 10:53 AM
  */
