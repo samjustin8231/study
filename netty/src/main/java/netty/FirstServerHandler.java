@@ -17,10 +17,10 @@ public class FirstServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        System.out.println(new Date() + ": 服务端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
+        System.out.println("=====> " + new Date() + ": 服务端读到数据 -> " + byteBuf.toString(Charset.forName("utf-8")));
 
         // 回复数据到客户端
-        System.out.println(new Date() + ": 服务端写出数据");
+        System.out.println("=====> " + new Date() + ": 服务端写出数据");
         ByteBuf out = getByteBuf(ctx);
         ctx.channel().writeAndFlush(out);
     }
@@ -31,7 +31,6 @@ public class FirstServerHandler extends ChannelInboundHandlerAdapter {
         ByteBuf buffer = ctx.alloc().buffer();
 
         buffer.writeBytes(bytes);
-
         return buffer;
     }
 }

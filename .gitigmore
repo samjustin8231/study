@@ -1,0 +1,4 @@
+*.class
+/netty/target/*
+/netty/target/
+/target/
