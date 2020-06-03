@@ -1,14 +1,15 @@
 package com.example.codedesign.ratelimiter;
 
-import com.example.codedesign.ratelimiter.alg.RateLimitAlg;
+import com.example.codedesign.ratelimiter.alg.FixedTimeWinRateLimitAlg;
 import com.example.codedesign.ratelimiter.exception.InternalErrorException;
+import com.example.codedesign.ratelimiter.rule.ApiLimit;
 import com.example.codedesign.ratelimiter.rule.RateLimitRule;
 import com.example.codedesign.ratelimiter.rule.RuleConfig;
-import com.example.codedesign.ratelimiter.rule.Yaml;
+import com.example.codedesign.ratelimiter.rule.datasource.FileRuleConfigSource;
+import com.example.codedesign.ratelimiter.rule.datasource.RuleConfigSource;
+import com.example.codedesign.ratelimiter.rule.parser.TrieRateLimitRule;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,51 +20,31 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RateLimiter {
 
     // 为每个api在内存中存储限流计数器
-    private ConcurrentHashMap<String, RateLimitAlg> counters = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, FixedTimeWinRateLimitAlg> counters = new ConcurrentHashMap<>();
     private RateLimitRule rule;
 
     public RateLimiter() {
-        log.info("====> RateLimiter初始化...");
-        // 将限流规则配置文件ratelimiter-rule.yaml中的内容读取到RuleConfig中
-        InputStream in = null;
-        RuleConfig ruleConfig = null;
-        try {
-            in = this.getClass().getResourceAsStream("/ratelimiter-rule.yaml");
-            if (in != null) {
-                Yaml yaml = new Yaml();
-                ruleConfig = yaml.loadAs(in, RuleConfig.class);
-            }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    log.error("close file error:{}", e);
-                }
-            }
-        }
+        log.info("====> new RateLimiter");
 
-        log.info("====> RateLimiter读取配置，创建ruleConfig");
-
-        // 将限流规则构建成支持快速查找的数据结构RateLimitRule
-        this.rule = new RateLimitRule(ruleConfig);
+        //改动主要在这里：调用RuleConfigSource类来实现配置加载
+        RuleConfigSource configSource = new FileRuleConfigSource();
+        RuleConfig ruleConfig = configSource.load();
+        this.rule = new TrieRateLimitRule(ruleConfig);
     }
-
-
 
     public boolean limit(String appId, String url) throws InternalErrorException {
         log.info("====> limit exe. appId:{}, url:{}", appId, url);
 
-        RuleConfig.ApiLimit apiLimit = rule.getLimit(appId, url);
+        ApiLimit apiLimit = rule.getLimit(appId, url);
         if (apiLimit == null) {
             return true;
         }
 
         // 获取api对应在内存中的限流计数器（rateLimitCounter）
         String counterKey = appId + ":" + apiLimit.getApi();
-        RateLimitAlg rateLimitCounter = counters.get(counterKey);
+        FixedTimeWinRateLimitAlg rateLimitCounter = counters.get(counterKey);
         if (rateLimitCounter == null) {
-            RateLimitAlg newRateLimitCounter = new RateLimitAlg(apiLimit.getLimit());
+            FixedTimeWinRateLimitAlg newRateLimitCounter = new FixedTimeWinRateLimitAlg(apiLimit.getLimit());
             rateLimitCounter = counters.putIfAbsent(counterKey, newRateLimitCounter);
             if (rateLimitCounter == null) {
                 rateLimitCounter = newRateLimitCounter;

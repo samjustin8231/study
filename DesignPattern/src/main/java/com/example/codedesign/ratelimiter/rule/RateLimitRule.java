@@ -1,12 +1,6 @@
 package com.example.codedesign.ratelimiter.rule;
 
-public class RateLimitRule {
-    public RateLimitRule(RuleConfig ruleConfig) {
+public interface RateLimitRule {
 
-    }
-
-    public RuleConfig.ApiLimit getLimit(String appId, String url) {
-
-        return null;
-    }
+    public ApiLimit getLimit(String appId, String url);
 }
